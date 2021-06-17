@@ -7,9 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
-  <link rel="canonical" href="https://example.com/code/">
+  <link rel="canonical" href="https://example.com/commands/">
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Database Creation - Creating Database using MongoDB</title>
+  <title>Some MongoDB commands - Creating Database using MongoDB</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,9 +18,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Database Creation";
-    var mkdocs_page_input_path = "code.md";
-    var mkdocs_page_url = "/code/";
+    var mkdocs_page_name = "Some MongoDB commands";
+    var mkdocs_page_input_path = "commands.md";
+    var mkdocs_page_url = "/commands/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
@@ -52,20 +52,14 @@
                     <li class="toctree-l1"><a class="reference internal" href="..">Installation Guide</a>
                     </li>
                 </ul>
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Database Creation</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#generating-dummy-data">Generating dummy data</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#generating-database-using-pymongo">Generating Database using PyMongo</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#verifying-creation-of-database">Verifying creation of Database</a>
-    </li>
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../code/">Database Creation</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../commands/">Some MongoDB commands</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Some MongoDB commands</a>
+    <ul class="current">
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -93,7 +87,7 @@
     
       
     
-    <li>Database Creation</li>
+    <li>Some MongoDB commands</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -105,74 +99,30 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="creating-database">Creating database</h1>
-<h2 id="generating-dummy-data">Generating dummy data</h2>
-<p>Generate dummy data of employees at <a href="https://www.generatedata.com/">https://www.generatedata.com/</a>. The following details were used for creating dataset:<br />
-    - Employee ID  <br />
-    - Name   <br />
-    - Age  <br />
-    - Gender  <br />
-    - Joining date   <br />
-    - Designation/ Job Profile   </p>
-<p>The dataset had 100 entries and it was generated as a json file.  </p>
-<p>Sample json file with 2 entries will look like : </p>
-<pre><code>[
-    {
-        &quot;_id&quot;: 1,
-        &quot;name&quot;: &quot;Raven Sawyer&quot;,
-        &quot;age&quot;: 24,
-        &quot;gender&quot;: &quot;M&quot;,
-        &quot;joining_date&quot;: &quot;17/09/2010&quot;,
-        &quot;designation&quot;: &quot;SD&quot;
-    },
-    {
-        &quot;_id&quot;: 2,
-        &quot;name&quot;: &quot;Jordan Shields&quot;,
-        &quot;age&quot;: 56,
-        &quot;gender&quot;: &quot;F &quot;,
-        &quot;joining_date&quot;: &quot;04/04/1992&quot;,
-        &quot;designation&quot;: &quot;AD&quot;
-    }
-]
+                <h2 id="working-with-different-commands-in-mongodb">Working with different commands in MongoDB</h2>
+<pre><code>show dbs : displays non-empty databases.  
+use database_name: sets current database.  
+show collections : displays collections in current database.  
+db.collection_name.find().pretty() : displays all documents in the given collection. pretty() is used so that the output is displayed in a clean way.
 </code></pre>
-<h2 id="generating-database-using-pymongo">Generating Database using PyMongo</h2>
-<p>Run the following python script to generate database of employees. Make sure to keep the json file in the same directory as the python script.</p>
-<pre><code>from pymongo import MongoClient
-import json
-
-client = MongoClient(host=&quot;localhost&quot;, port=27017)
-
-# Initializing employee_data db
-db = client[&quot;employee_data&quot;]
-
-final_sample = db.final_sample
-
-# Dropping existing collection to avoid appending to the existing collection
-db.drop_collection(final_sample)  
-
-# Adding collection to db
-final_sample = db.final_sample
-
-# Opening JSON file (relative path to file)
-f = open('employee_data.json',)
-
-# Returns JSON object as a dictionary
-data = json.load(f)
-
-# Iterating through the json list
-for i in data:
-
-    # Adding document to collection
-    result = final_sample.insert_one(i); 
-
-# Closing file
-f.close()
-</code></pre>
-<h2 id="verifying-creation-of-database">Verifying creation of Database</h2>
-<p>Run MongoDB on the terminal. You can refer to <a href="..">Running MongoDB</a>. <br />
-Type the commands given in the following screenshot in your MongoDB shell and you can see the database was successfully created.</p>
 <p><img alt="Screenshot" src="../images/assign1-1.png" />  </p>
-<p>You can also use MongoDB Compass to check if the database was created.</p>
+<pre><code>db.collection_name.find({gender : 'M'}).pretty() : displays documents of all male employees.
+</code></pre>
+<p><img alt="Screenshot" src="../images/assign1-2.png" />  </p>
+<pre><code>db.collection_name.find().sort({age : 1}).pretty() : documents displayed in ascending order of age.  
+</code></pre>
+<p><img alt="Screenshot" src="../images/assign1-3.png" />  </p>
+<pre><code>db.collection_name.find({designation : 'I'}).count() : displays count of intern employees.
+</code></pre>
+<pre><code>db.collection_name.find().limit(n).pretty() : limits the output to n documents.
+</code></pre>
+<p><img alt="Screenshot" src="../images/assign1-4.png" /></p>
+<pre><code>db.collection_name.update({_id = 100}, {$rename : {designation : 'job_profile'}}) : changes field 'designation' to 'job_profile' for employee with _id = 100.
+</code></pre>
+<p><img alt="Screenshot" src="../images/assign1-5.png" /></p>
+<pre><code>db.collection_name.find({age : {$gt : 55}}).pretty() : displays all employees with age &gt; 55.
+</code></pre>
+<p><img alt="Screenshot" src="../images/assign1-6.png" /></p>
               
             </div>
           </div>
@@ -180,10 +130,10 @@ Type the commands given in the following screenshot in your MongoDB shell and yo
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../commands/" class="btn btn-neutral float-right" title="Some MongoDB commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../references/" class="btn btn-neutral float-right" title="References">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href=".." class="btn btn-neutral" title="Installation Guide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../code/" class="btn btn-neutral" title="Database Creation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -209,10 +159,10 @@ Type the commands given in the following screenshot in your MongoDB shell and yo
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../code/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../commands/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../references/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
